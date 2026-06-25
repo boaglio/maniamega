@@ -39,8 +39,9 @@ are needed.
   scroll across and wrap, and the baseline slowly drifts down. Each wave varies
   direction, speed, amplitude and wavelength. Destroyed enemies are replaced until
   the wave's quota is met.
-- A constantly **draining ENERGY bar** (bottom) is the real pressure — clear the
-  wave before it empties or you lose a ship. It shades green → yellow → red.
+- A constantly **draining ENERGY bar** (bottom, labelled `ENERGY`) is the real
+  pressure — clear the wave before it empties or you lose a ship. It's yellow when
+  full and turns red when low.
 - **Wave clear** drains the remaining energy into your score as a bonus (blips, no
   text), then the next object type appears (5 types cycle, each a little faster).
 - **3 ships**, shown as little icons top-right. Lose one on a hit or empty energy;

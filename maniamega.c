@@ -59,10 +59,11 @@
 #define WAVE_QUOTA			15		// enemies to destroy to clear a wave
 
 // Energy bar
-#define ENERGY_MAX			224		// 1 unit == 1 pixel of bar width
-#define ENERGY_BAR_X		16
-#define ENERGY_BAR_Y		200
-#define ENERGY_BAR_H		7
+#define ENERGY_MAX			224		// energy logic units (game balance)
+#define ENERGY_BAR_X		64		// bar starts after the "ENERGY" label
+#define ENERGY_BAR_W		128		// bar pixel width (full)
+#define ENERGY_BAR_Y		202
+#define ENERGY_BAR_H		5
 
 #define LIVES_START			3
 
@@ -323,17 +324,27 @@ void DrawHud()
 
 void DrawEnergyBar(bool force)
 {
-	i16 w = g_Energy;
+	// Scale the energy value (0..ENERGY_MAX) to the bar's pixel width.
+	i16 w = (i16)(((i32)g_Energy * ENERGY_BAR_W) / ENERGY_MAX);
 	if (w < 0) w = 0;
+	if (w > ENERGY_BAR_W) w = ENERGY_BAR_W;
+
+	if (force)									// (re)draw the static label
+	{
+		Print_SetColor(COLOR_WHITE, COLOR_BLACK);
+		Print_SetPosition(8, ENERGY_BAR_Y - 1);
+		Print_DrawText("ENERGY");
+	}
 	if (!force && w == g_EnergyDrawn)
 		return;
 	g_EnergyDrawn = w;
 
-	u8 col = (w > 150) ? COLOR_LIGHT_GREEN : (w > 70) ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_RED;
+	// Yellow when full, red when low.
+	u8 col = (g_Energy > (ENERGY_MAX / 2)) ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_RED;
 	if (w > 0)
 		VDP_CommandHMMV(ENERGY_BAR_X, ENERGY_BAR_Y, w, ENERGY_BAR_H, col);
-	if (w < ENERGY_MAX)
-		VDP_CommandHMMV(ENERGY_BAR_X + w, ENERGY_BAR_Y, ENERGY_MAX - w, ENERGY_BAR_H, COLOR_DARK_BLUE);
+	if (w < ENERGY_BAR_W)
+		VDP_CommandHMMV(ENERGY_BAR_X + w, ENERGY_BAR_Y, ENERGY_BAR_W - w, ENERGY_BAR_H, COLOR_DARK_BLUE);
 }
 
 //-----------------------------------------------------------------------------
