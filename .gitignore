@@ -1,0 +1,10 @@
+# Build artifacts
+out/
+emul/
+
+# MSXgl writes this into the engine tree on first build
+MSXgl/projects/default_config.js
+
+# Editor / OS
+*.swp
+.DS_Store
